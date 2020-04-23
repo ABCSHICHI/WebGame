@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <style type="text/css">
+        #canvas { width: 250px; height: 250px;}
+        canvas { border: 10px solid black;}
+    </style>
+    <body onload="draw();">
+        <canvas id="canvas" width="150" height="150">
+            兼容的浏览器！！
+        </canvas>
+        <script type="text/javascript">
+            function draw(){
+                canvas = document.getElementById("canvas");
+                if(canvas.getContext){
+                    //获取上下文环境
+                    var ctx = canvas.getContext("2d");
+                    //画红心
+                    //描边模式：设置样式
+                    ctx.strokeStyle = "rgb(200,0,0)";
+                    //填充样式：设置样式
+                    ctx.fillStyle = "rgb(255,0,0)";
+                    //描边边框
+                    ctx.shadowOffsetX = 3;
+                    ctx.shadowOffsetY = 3;
+                    //描边颜色
+                    ctx.shadowColor = "rgba(150,0,0,0.2)"
+                    //扩散程度
+                    ctx.shadowBlur = 3;
+                    //开始路径绘制
+                    ctx.beginPath();
+                    //起点
+                    ctx.moveTo(75,60);
+                    //贝塞尔曲线提供点（125,20）,（125,100）,（75,115）
+                    ctx.bezierCurveTo(125,20,125,100,75,115);
+                     //贝塞尔曲线提供点(25,100）,（25,20）,（75,60);
+                    ctx.bezierCurveTo(25,100,25,20,75,60);
+                    //开始描边
+                    ctx.stroke();
+                    //开始填充
+                    ctx.fill();
+                }
+            }
+        </script>
+    </body>
+</html>

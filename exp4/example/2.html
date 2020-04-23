@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript">
+            function draw(){
+                var canvas = document.getElementById("canvas");
+                var ctx = canvas.getContext("2d");
+                //绘制矩形填充
+                ctx.fillRect(25,75,50,50);
+                //对某个区域清屏
+                ctx.clearRect(125,75,50,50);
+                //描边矩形路径
+                ctx.strokeRect(125,75,50,50);
+            }
+        </script>
+        <style type="text/css">
+        canvas{ border:1px solid black;}
+    </style>
+    </head>
+    <body onload="draw();">
+        <canvas id="canvas" width="200" height="200">
+
+        </canvas>
+    </body>
+</html>

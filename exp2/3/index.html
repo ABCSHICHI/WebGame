@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>5.3图片变换</title>
+        <script type="text/javascript">
+            function mouseOver(){
+                document. mouse.src="gif/mouse_over.jpg";
+            }
+            function mouseOut(){
+                document. mouse.src="gif/mouse_out.jpg";
+            }
+            function mousePressd(event){
+                if(event.button==2) 
+                    alert("你点击了鼠标右键！");
+                else 
+                    alert("你点击了鼠标左键！");
+            }
+        </script>
+    </head>
+    <body onmousedown="mousePressd(event)">
+        <img border="0" src="gif/mouse_out.jpg" name="mouse"
+        onmouseOver="mouseOver()" onmouseOut="mouseOut()"/>
+
+    </body>
+</html>

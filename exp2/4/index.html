@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="UTF-8">
+    <title>JS的网页链接</title>
+</head>
+<body>
+    <form name="frm">
+        <select name="slt" onchange="goto_url()">
+            <option value="http://www.baidu.com">百度</option>
+            <option value="http://www.sina.com">新浪</option>
+            <option value="http://www.163.com">网易</option>
+        </select>
+    </form>
+    <script language="JavaScript">
+        function goto_url(){
+            for(var i=0;i<3;i++){
+                if(document.frm.slt[i].selected)
+                    location.href=document.frm.slt[i].value;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="jquery-1.8.3.min.js"></script>
+        <script type="text/javascript">
+            $().ready(function(){
+                $("#btn1").click(function(){
+                    $("p").hide(1000,function(){
+                        $("p").show(1000);});
+                });
+                $(".btn2").click(function(){
+                    $("p").show(1000);});
+
+                $("#btn3").click(function(){
+                    $("p").fadeOut(1000);});
+                $("#btn4").click(function(){
+                    $("p").fadeIn(1000);});
+
+                $("div").animate({
+                    width: '300px',
+                    padding: '100px'
+                }, 4000);
+            });
+            
+        </script>
+    </head>
+    <body>
+        <button id="btn1">hide</button>
+        <button class="btn2">show</button>
+        <button id="btn3">fadeOut</button>
+        <button id="btn4">fadeIn</button>
+        <p>text1</p>
+        <p>text2</p>
+        <p>text3</p>
+
+        <div style="width: 100px; border: solid 1px red;"><!--style是行类，优先级最高，所有属性写一起-->
+            <h1>HELLO</h1>
+            
+        </div>
+        <div>
+            <h1>HELLO</h1>
+        </div>
+    </body>
+</html>

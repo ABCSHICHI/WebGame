@@ -1,0 +1,23 @@
+<html>
+    <head>
+<script src="jquery-1.8.3.min.js">
+
+</script>
+<script>
+    $(document).ready(function(){//当我们的文档加载完后调用
+        $("p").hover(
+        function(){
+            $(this).css("background-color","blue");  
+        },
+        function(){
+            $(this).css("background-color","white");  
+        });
+    });
+</script>
+    </head>
+    <body>
+        <p>test1</p>
+        <p>test2</p>
+        <p>test3</p>
+    </body>
+</html>

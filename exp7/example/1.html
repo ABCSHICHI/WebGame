@@ -1,0 +1,28 @@
+<html>
+    <head>
+<script src="jquery-1.8.3.min.js">
+
+</script>
+<script>
+    $(document).ready(function(){//当我们的文档加载完后调用
+        $("#btn1").click(function(){
+            $("p").append("<b>Append text</b>");//当前元素下的css中的背景颜色
+        });
+        $("#btn2").click(function(){
+            $("ol").append("<li>Append item</li>");//当前元素下的css中的背景颜色
+        });
+    });
+</script>
+    </head>
+    <body>
+        <p>This is a paragraph.</p>
+        <p>This is a another paragraph.</p>
+        <ol>
+            <li>List item 1</li>
+            <li>List item 2</li>
+            <li>List item 3</li>
+        </ol>
+        <button id="btn1">追加文本</button>
+        <button id="btn2">追加列表项/button>
+    </body>
+</html>

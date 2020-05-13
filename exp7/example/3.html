@@ -1,0 +1,33 @@
+<html>
+    <head>
+<script src="jquery-1.8.3.min.js">
+
+</script>
+<script>
+    $(function(){//当我们的文档加载完后调用
+        $(".canedit").each(function(){//遍历找到的每一个元素
+          $(this).bind("dblclick",function(){//元素自身绑定方法
+              var html = $(this).html();//获取当前元素的值
+              var textarea = "<textarea name='temTextarea' id='temTextarea' onblur='saveText(this)'>" + html + "</textarea>";
+            $(this).empty().html(textarea);
+          });
+          $(this).mouseenter(function(){
+            $(this).addClass("caneditBg")
+          }).mouseleave(function(){
+              $(this).removeClass("caneditBg")});
+        });
+        
+    });
+    saveText = function(o){
+        var text = $(o).val();//取得表单中元素的值
+        $(o).parent().empty().html(text);//对选中元素赋值text，清空上一次div表单中数据，重新粘贴全部文本
+    }
+</script>
+    </head>
+    <body>
+        <div class="canedit">
+即点即改！
+        </div>
+        
+    </body>
+</html>

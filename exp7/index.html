@@ -1,0 +1,235 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>图片记忆游戏</title>
+        <style>
+            form{
+                width: 330px;
+                margin: 20px;
+                background-color: pink;
+                padding: 20px;
+            }
+            input{
+                text-align: right;
+            }
+        </style>
+        <script type="text/javascript">
+        /* canvas相关变量 */
+           var cwidth = 900;
+           var cheight = 400; 
+           var ctx;
+        //    卡片变量
+        var firstpick = true;
+        var firstcard = -1;
+        var secondcard;
+        var cardwidth = 100;
+        var cardheight = 100;
+        // 颜色变量
+        var backcolor = "rgb(128,0,128)";
+        var tablecolor = "rgb(255,255,255)";
+        // 初始位置和图片边距
+        var firstsx = 30;
+        var firstsy = 50;
+        var margin = 30;
+        // 其他变量
+        var deck =[];
+        var tid;
+        var matched;//是否匹配
+        var starttime;
+        var count = 0;//以匹配数
+        var tem=true;
+        var pairs = [
+            ["child1.jpg","child2.jpg"],
+	        ["man1.jpg","man2.jpg"],
+	        ["pen1.jpg","pen2.jpg"],
+	        ["aviva1.jpg","aviva2.jpg"],	   
+	        ["piano1.jpg","piano2.jpg"]	
+        ]
+
+        </script>
+    </head>
+    <body onload="init()">
+        <canvas id="canvas" width="900" height="400">
+            使用支持canvas的浏览器
+        </canvas>
+        <br/>
+        <script type="text/javascript">
+        //卡片构造函数，info表示第几组
+            function Card(sx,sy,swidth,sheight,img,info){
+                this.sx = sx;//卡片x坐标
+                this.sy = sy;//卡片y坐标
+                this.swidth = swidth;
+                this.sheight = sheight;
+                this.info = info;//卡片信息-组号
+                this.img = img;//卡片的对应图片
+                this.draw = drawback;
+            }
+            function drawback(){
+                ctx.fillStyle = backcolor;
+                ctx.fillRect(this.sx,this.sy,this.swidth,this.sheight);
+            }
+            // 创建存放卡片的桌子
+            function makedeck(){
+                var i;
+                var acard;  
+                var bcard;
+                var pica;
+                var picb;
+                var cx = firstsx;
+                var cy = firstsy;
+                for(i=0; i<pairs.length; i++){
+                    // 创建卡片A
+                    pica = new Image();
+                    pica.src = pairs[i][0];
+                    acard = new Card(cx,cy,cardwidth,cardheight,pica,i);
+                    deck.push(acard);
+                    // 创建卡片B
+                    picb = new Image();
+                    picb.src = pairs[i][1];
+                    bcard = new Card(cx,cy+cardheight+margin,cardwidth,cardheight,picb,i);
+                    deck.push(bcard);
+                    // 改变cx以绘制下一组图片
+                    cx = cx + cardwidth + margin;
+                    //绘制
+                    acard.draw();
+                    bcard.draw();
+                }
+            }
+            // 洗牌函数
+            function shuffle(){
+                var i;//随机变量1
+                var k;//随机变量2
+                var holderinfo;//中间变量
+                var holderimg;//中间变量
+                var dl = deck.length;//桌子长度
+                var nt;
+                for(nt=0;nt<3*dl;nt++){
+                    i = Math.floor(Math.random()*dl);
+                    k = Math.floor(Math.random()*dl);
+                    holderinfo = deck[i].info;
+                    holderimg = deck[i].img;
+                    deck[i].info = deck[k].info;
+                    deck[i].img = deck[k].img;
+                    deck[k].info = holderinfo;
+                    deck[k].img = holderimg;
+                 }
+            }
+            //canvas的触发函数，参数ev为click事件获取的环境变量
+            function choose(ev){
+                var out;
+                var mx;//鼠标X坐标
+                var my;
+                var pick1;
+                var pick2;
+                // 根据浏览器获取鼠标坐标
+                if ( ev.layerX ||  ev.layerX == 0) { // Firefox
+   			        mx= ev.layerX;
+    		        my = ev.layerY;
+  		        } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+    		        mx = ev.offsetX;
+    		        my = ev.offsetY;
+  		        }
+                  //循序desk数组找出所选取的卡片	
+	            var i;
+            	for (i=0;i<deck.length;i++){
+		            var card = deck[i];
+		            if (card.sx >=0)  {
+                        //根据鼠标坐标判断是否选择了卡片
+                        if ((mx>card.sx) && (mx<card.sx+card.swidth) &&
+                             (my>card.sy) && (my<card.sy+card.sheight) && tem == true) {
+			            //确定选择的是不第一张卡片
+			                if ((firstpick)|| (i!=firstcard)) {
+				                break;
+                            }
+		                }
+                    }
+                }
+	                //如果确定选取了卡片
+	                if (i<deck.length) {  
+		            //选取的是第一张卡片
+		                if (firstpick) {
+			                firstcard = i;
+			                firstpick = false;
+			                //绘制卡片对应的图片
+			                ctx.drawImage(card.img,card.sx,card.sy,card.swidth,card.sheight); 
+		                }
+		                //选取的是第二张卡片
+		                else {
+			                secondcard = i;
+			                ctx.drawImage(card.img,card.sx,card.sy,card.swidth,card.sheight); 
+                            // 判断两张卡片是否为同一组，否则将matched设为false继续匹配
+                            if(card.info == deck[firstcard].info){
+                                // 更新文本提示
+                                matched = true;
+                                count++;
+                                ctx.fillStyle = tablecolor;
+                                ctx.fillRect(10,340,900,100);
+                                ctx.fillStyle = backcolor;
+                                ctx.fillText("已匹配组数：" + String(count),10,360);
+                                // 判断是否已经全部匹配完成，如果是则输出完成的信息提示
+                                if(count>=0.5*deck.length){
+                                    var now = new Date();
+                                    var nt = Number(now.getTime());
+                                    var seconds = Math.floor(0.5+(nt-starttime)/1000);
+                                    ctx.fillStyle = tablecolor;
+                                    ctx.fillRect(0,0,900,400);
+                                    ctx.fillStyle = backcolor;
+                                    out = "完成时间："+String(seconds)+"秒";
+                                    ctx.fillText(out,10,100);
+                                    ctx.fillText("刷新页面重试！",10,300);
+                                    return;
+                                }
+                            }
+                            else{
+                                matched = false;
+                            }
+                            firstpick= true;
+                            //定时器，1秒后执行
+                            tid = setTimeout(flipback,1000);
+                            tem = false;
+                        }
+		            
+                    }
+                }
+            
+            //翻牌函数
+            function flipback(){
+                var card;
+                // 如果不匹配，则重新绘制卡片背景
+                if(!matched){
+                    deck[firstcard].draw();
+                    deck[secondcard].draw();
+                }
+                // 如果匹配，使用canvas背景色填充，并设置卡片的x坐标为负值
+                else{
+                    ctx.fillStyle = tablecolor;
+                    ctx.fillRect(deck[secondcard].sx, deck[secondcard].sy,
+                    deck[secondcard].swidth, deck[secondcard].sheight);
+                    ctx.fillRect(deck[firstcard].sx, deck[firstcard].sy,
+                    deck[firstcard].swidth, deck[firstcard].sheight);
+                    deck[secondcard].sx = -1;
+                    deck[firstcard].sx = -1;
+                }
+                tem = true;
+            }
+            //初始化函数
+            function init(){
+                ctx = document.getElementById('canvas').getContext('2d');
+                canvas1 = document.getElementById('canvas');
+                // canvas监听函数，触发choose
+                canvas1.addEventListener('click',choose,false);
+                // 产生桌子
+                makedeck();
+                //洗牌
+                shuffle();
+                //文本信息
+                ctx.font = "bold 20pt sans-serif";
+                ctx.fillText("选取两张卡片使他们匹配",10,30);
+                ctx.fillText("已匹配组数：0",10,360);
+                // 时间变了
+                starttime = new Date();
+                starttime = Number(starttime.getTime());
+            }
+        </script>
+    </body>
+</html>
